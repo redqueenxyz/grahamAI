@@ -1,14 +1,14 @@
 // Buys coin from Exchange
-require('dotenv').config();
+import dotenv = require("dotenv"); .config();
 
 // Packages
-const Kraken = require('kraken-api');
-const fs = require('fs');
-const util = require('util');
+import fs = require("fs");
+import Kraken = require("kraken-api");
+import util = require("util");
 
 // exchange Settings
 // Kraken
-// Set an higher timeout 
+// Set an higher timeout
 const exchange = new Kraken(process.env.KRAKEN_KEY, process.env.KRAKEN_SECRET, {
     timeout: 60 * 60 * 48 * 1000,
 });
@@ -16,18 +16,18 @@ const exchange = new Kraken(process.env.KRAKEN_KEY, process.env.KRAKEN_SECRET, {
 const investmentAmount = process.env.INVESTMENT_AMOUNT;
 // see full list of exhange pairs here
 // https://api.kraken.com/0/public/AssetPairs
-const pair = (process.env.ASSETS_PAIR || 'XBTCZEUR').toUpperCase();
-const cryptoCurrency = pair.split('X')[1].slice(0, 3);
-const fiatCurrency = pair.split('Z')[1].slice(0, 3);
+const pair = (process.env.ASSETS_PAIR || "XBTCZEUR").toUpperCase();
+const cryptoCurrency = pair.split("X")[1].slice(0, 3);
+const fiatCurrency = pair.split("Z")[1].slice(0, 3);
 
 /**
  * @param {string} pairname
- * @return {object} marketData 
- *  
+ * @return {object} marketData
+ *
  */
-let getExchangeData = async (coin, base = 'BTC') => {
+const getExchangeData = async (coin: string, base: string = "BTC") => {
     const interval = 60;
-    const tickResponse = await client.api('OHLC', { pair, interval });
+    const ExchangeResponse = await exchange.api("OHLC", { pair, interval });
     // a = ask array(<price>, <whole lot volume>, <lot volume>),
     // b = bid array(<price>, <whole lot volume>, <lot volume>),
     // c = last trade closed array(<price>, <lot volume>),
@@ -37,32 +37,30 @@ let getExchangeData = async (coin, base = 'BTC') => {
     // l = low array(<today>, <last 24 hours>),
     // h = high array(<today>, <last 24 hours>),
     // o = today's opening price
-    console.log(tickResponse);
+    console.log(ExchangeResponse);
 };
 
+getExchangeData("ETH");
 
-getExchangeData();
+// let loopSymbols = async (coins) => {
+//     winston.info('Looping through Coins:', coins);
 
-let loopSymbols = async (coins) => {
-    winston.info('Looping through Coins:', coins);
+//             .then((priceData) => {
+//     // Custom Measures
+//     priceData['TIMESTAMP'] = new Date().toISOString(); // Timestamp
+//     priceData['MKTSHARE'] = priceData['MKTCAP'] / currentMarketCap;
 
-
-            .then((priceData) => {
-    // Custom Measures
-    priceData['TIMESTAMP'] = new Date().toISOString(); // Timestamp
-    priceData['MKTSHARE'] = priceData['MKTCAP'] / currentMarketCap;
-
-    // Save Data
-    coinSaver(symbol, priceData);
-    marketDataSaver(symbol, priceData);
-})
-    .catch((error) => {
-        winston.error('Error looping through Coins:', coins);
-        winston.error(error);
-    });
-    }
-};
-console.log(pair);
+//     // Save Data
+//     coinSaver(symbol, priceData);
+//     marketDataSaver(symbol, priceData);
+// })
+//     .catch((error) => {
+//         winston.error('Error looping through Coins:', coins);
+//         winston.error(error);
+//     });
+//     }
+// };
+// console.log(pair);
 // (
 
 //     async () => {
