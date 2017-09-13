@@ -1,9 +1,11 @@
 {
     "env": {
-        "node": true,
-        "es6": true
+        "node": true
     },
-    "parser": "babel-eslint",
+    "sourceType": "module",
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
     "extends": [
         "eslint:recommended",
         "google"

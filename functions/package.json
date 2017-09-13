@@ -21,12 +21,13 @@
     "chai": "^4.1.2",
     "eslint": "^4.6.1",
     "eslint-config-google": "^0.9.1",
+    "jest": "^21.0.2",
     "mocha": "^3.5.0"
   },
   "scripts": {
-    "test": "mocha",
-    "build": "babel index.js",
-    "start": "nodemon index.js"
+    "test": "jest",
+    "start": "node bot.js",
+    "debug": "nodemon --inspect bot.js"
   },
   "author": "git@github.com:redqueenxyz/grahamAI.git",
   "license": "ISC",
