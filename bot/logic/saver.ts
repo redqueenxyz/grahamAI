@@ -1,10 +1,6 @@
-// Saves to GcloudDataStore
-exports = module.exports = {};
+// Saves to database
 
-let winston = require('winston');
-let Datastore = require('@google-cloud/datastore'); //  gcloud beta auth application-default login
-// https://googlecloudplatform.github.io/google-cloud-node/#/docs/datastore/latest/guides/authentication
-
+import * as datastore from '@google-cloud/datastore'
 
 // Local Imports
 const coins = require('../parameters/coins');
@@ -20,9 +16,8 @@ const datastore = Datastore();
 // TODO: save inflatio rate
 
 
-exports.coinSaver = async (symbol, coinData) => {
-    winston.info('Replacing Coin Data for [%s] to Google DataStore...', symbol);
-    // Upsert/Replace the Entity at the Data Store using the Key
+export async function coinSaver(symbol: string, coinData: object) {
+    console.log(`Saving ${coinData} for ${symbol}`)
 
     datastore.upsert({
         key: datastore.key([
@@ -32,16 +27,15 @@ exports.coinSaver = async (symbol, coinData) => {
         data: coinData,
     })
         .then(() => {
-            winston.info('Saving Coin [%s]', symbol);
+            console.log(`Saved data for ${symbol}`)
         })
         .catch((error) => {
-            winston.error('Error saving Coin [%s]', symbol);
-            winston.error(error);
+            console.log(`Error saving data for ${symbol}: ${err.stack}`)
         });
 };
 
 exports.exchangeDataSaver = async (symbol, exchangeData) => {
-    winston.info('Saving Exchange Data for [%s] to Google DataStore...', symbol);
+    console.log(`Saving Exchange Data for [%s] to Google DataStore...', symbol);
 
     const timestamp = new Date().toISOString();
     // Key
@@ -59,15 +53,15 @@ exports.exchangeDataSaver = async (symbol, exchangeData) => {
 
     datastore.upsert(entity) // Overwrite, not insert
         .then(() => {
-            winston.info('Saved Market Data for [%s]', symbol);
+            console.log(`Saved Market Data for [%s]', symbol);
         })
         .catch((error) => {
-            winston.error('Error saving Market Data for [%s]', symbol);
-            winston.error(error);
-        });
+    winston.error('Error saving Market Data for [%s]', symbol);
+    winston.error(error);
+});
 };
 exports.marketDataSaver = async (symbol, coinData) => {
-    winston.info('Saving Market Data for [%s] to Google DataStore...', symbol);
+    console.log(`Saving Market Data for [%s] to Google DataStore...', symbol);
 
     const timestamp = new Date().toISOString();
     // Key
@@ -85,12 +79,12 @@ exports.marketDataSaver = async (symbol, coinData) => {
 
     datastore.upsert(entity) // Overwrite, not insert
         .then(() => {
-            winston.info('Saved Market Data for [%s]', symbol);
+            console.log(`Saved Market Data for [%s]', symbol);
         })
         .catch((error) => {
-            winston.error('Error saving Market Data for [%s]', symbol);
-            winston.error(error);
-        });
+    winston.error('Error saving Market Data for [%s]', symbol);
+    winston.error(error);
+});
 };
 
 // Initialize Google Data Store 

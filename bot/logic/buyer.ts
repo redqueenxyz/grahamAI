@@ -1,3 +1,4 @@
+
 // Buys coin from Exchange
 require('dotenv').config();
 
@@ -44,23 +45,23 @@ let getExchangeData = async (coin, base = 'BTC') => {
 getExchangeData();
 
 let loopSymbols = async (coins) => {
-    winston.info('Looping through Coins:', coins);
+    console.log(`Looping through Coins:`)
 
 
-            .then((priceData) => {
-    // Custom Measures
-    priceData['TIMESTAMP'] = new Date().toISOString(); // Timestamp
-    priceData['MKTSHARE'] = priceData['MKTCAP'] / currentMarketCap;
+        .then((priceData) => {
+            // Custom Measures
+            priceData['TIMESTAMP'] = new Date().toISOString(); // Timestamp
+            priceData['MKTSHARE'] = priceData['MKTCAP'] / currentMarketCap;
 
-    // Save Data
-    coinSaver(symbol, priceData);
-    marketDataSaver(symbol, priceData);
-})
-    .catch((error) => {
-        winston.error('Error looping through Coins:', coins);
+            // Save Data
+            coinSaver(symbol, priceData);
+            marketDataSaver(symbol, priceData);
+        })
+        .catch((error) => {
+            winston.error('Error looping through Coins:`)
         winston.error(error);
-    });
-    }
+        });
+}
 };
 console.log(pair);
 // (
