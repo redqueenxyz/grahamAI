@@ -1,17 +1,17 @@
-// Saves to database
+// Saves data to a database
 
 import * as datastore from '@google-cloud/datastore'
 
 // Local Imports
 const coins = require('../parameters/coins');
+
+// Google Cloud Datastore
 const datastore = Datastore();
 
-// Instantiates a GCloud Data Store client
-
+// TODO: Add these variables?
 // save price data 
 // save mktprice
 // save USD
-
 // TODO: save USD rate
 // TODO: save inflatio rate
 
@@ -29,13 +29,18 @@ export async function coinSaver(symbol: string, coinData: object) {
         .then(() => {
             console.log(`Saved data for ${symbol}`)
         })
-        .catch((error) => {
+        .catch(error => {
             console.log(`Error saving data for ${symbol}: ${err.stack}`)
         });
 };
 
-exports.exchangeDataSaver = async (symbol, exchangeData) => {
-    console.log(`Saving Exchange Data for [%s] to Google DataStore...', symbol);
+/**
+ * 
+ * @param symbol {string} - Crypto ticker symbol
+ * @param exchangeData {object} - Kraken data response
+ */
+export async function exchangeDataSaver(symbol: string, exchangeData: object) {
+    console.log(`Saving Exchange Data for ${symbol} to Google DataStore...`);
 
     const timestamp = new Date().toISOString();
     // Key
@@ -53,15 +58,20 @@ exports.exchangeDataSaver = async (symbol, exchangeData) => {
 
     datastore.upsert(entity) // Overwrite, not insert
         .then(() => {
-            console.log(`Saved Market Data for [%s]', symbol);
+            console.log(`Saved Market Data for ${symbol}`)
         })
-        .catch((error) => {
-    winston.error('Error saving Market Data for [%s]', symbol);
-    winston.error(error);
-});
+        .catch(error => {
+            console.log(`Error saving Market Data for ${symbol}: ${err.stack}`)
+        });
 };
-exports.marketDataSaver = async (symbol, coinData) => {
-    console.log(`Saving Market Data for [%s] to Google DataStore...', symbol);
+
+/**
+ * Saves market data from Cryptowatch to Cloud DataStore
+ * @param symbol {string} - coinID
+ * @param coinData {object} - coinData
+ */
+export async function marketDataSaver(symbol: string, coinData: object) {
+    console.log(`Saving Market Data for ${symbol} to Google DataStore`)
 
     const timestamp = new Date().toISOString();
     // Key
@@ -79,17 +89,15 @@ exports.marketDataSaver = async (symbol, coinData) => {
 
     datastore.upsert(entity) // Overwrite, not insert
         .then(() => {
-            console.log(`Saved Market Data for [%s]', symbol);
+            console.log(`Saved Market Data for ${symbol}`)
         })
-        .catch((error) => {
-    winston.error('Error saving Market Data for [%s]', symbol);
-    winston.error(error);
-});
+        .catch(error => {
+            console.log(`Error saving Market Data for ${symbol}: ${err.stack}`)
+        });
 };
 
-// Initialize Google Data Store 
 // Parent Entity: Coin, 'Symbol'
-
+// Initialize Google Data Store 
 // coins.map(symbol => exports.coinSaver(symbol))
 
 
