@@ -1,27 +1,15 @@
+// Queries APIs for Data
 
-// Retrieves data from Cryptocompare
-
-// TODO: 
-// 1) Save symbols to Google Cloud JSON storeA > https://cloud.google.com/datastore/docs/datastore-api-tutorial#datastore-update-entity-nodejs
-// Timestamp, get dictionaries of symbols
-// 2) On HTTP Request, Cloud Function > getMarketdata(symbols) => update symbol Data
-// 3) On HTTP Request, Cloud Function > calcMarketCap()
-
+// Package Dependencies
 import * as fetch from 'node-fetch'
 import * as cryptocompare from 'cryptocompare'
 
-// Packages
-let cryptocompare = require('cryptocompare');
+// Local Dependencies
+import { coins } from './coins'
+import { coinSaver, marketDataSaver } from './saver'
 
-// Local Imports
-let { coinSaver, marketDataSaver } = require('./saver');
-
-// Coin list
-const coins = require('../parameters/coins');
-const datastore = Datastore();
-
-let loopSymbols = async (coins) => {
-  console.log(`Looping through Coins:`)
+export async function loopSymbols(coins: string[]) {
+  console.log(`Looping through {$coin}`)
 
   for (let coin = 0; coin < coins.length; coin++) {
     const symbol = coins[coin];
@@ -29,7 +17,7 @@ let loopSymbols = async (coins) => {
     const currentMarketCap = await calcMarketCap();
     getMarketData(symbol)
 
-      .then((priceData) => {
+      .then(priceData => {
         // Custom Measures
         priceData['TIMESTAMP'] = new Date().toISOString(); // Timestamp
         priceData['MKTSHARE'] = priceData['MKTCAP'] / currentMarketCap;
@@ -39,15 +27,14 @@ let loopSymbols = async (coins) => {
         marketDataSaver(symbol, priceData);
       })
       .catch((error) => {
-        winston.error('Error looping through Coins:`)
-        winston.error(error);
+        console.error(`Error looping through Coins: ${err.stack}`)
       });
   }
 };
 
 
-let getMarketData = async (coin, base = 'BTC', source = 'Cryptocompare') => {
-  console.log(`Retrieving Price Data for [%s] from %s`)
+async function getMarketData(coin: string, base: string = 'ETH', source: string = 'Cryptocompare') {
+  console.error(`Error Retrieving Price Data for ${coin}`)
 
   // TODO: Wrapper for cryptocompare / market APIs?
   // switch (source) {
@@ -64,34 +51,35 @@ let getMarketData = async (coin, base = 'BTC', source = 'Cryptocompare') => {
 };
 
 
-let calcMarketCap = async () => {
-  console.log(`Calculating current Total Market Cap...');
+async function calcMarketCap() {
+  console.log(`Calculating current Total Market Cap...`)
 
   const query = datastore.createQuery('Coin')
-        .groupBy('MKTCAP');
+    .groupBy('MKTCAP');
 
 
-      return datastore.runQuery(query)
-        .then((results) => {
-          const coins = results[0];
+  return datastore.runQuery(query)
+    .then(results => {
+      const coins = results[0];
 
-          let coinMarketCaps = [];
-          coins.map((coin) => {
-            coinMarketCaps.push(coin['MKTCAP']);
-          }); // Map and pull from JSON FIXME: Way to do it by just pulling MKTCAP, not whole array?
+      let coinMarketCaps = [];
+      coins.map(coin => {
+        coinMarketCaps.push(coin['MKTCAP']);
+      });
 
-          let TotalMarketCap = coinMarketCaps.reduce((a, b) => a + b); // sum
+      let TotalMarketCap = coinMarketCaps.reduce((a, b) => a + b); // sum
 
-          console.log(`Calculed current Total Market Cap:', TotalMarketCap);
+      console.log(`Calculed current Total Market Cap: ${TotalMarketCap}`)
       return TotalMarketCap;
-})
-    .catch((error) => {
-  winston.error('Error calculating current Total Market Cap...');
-});
+    })
+    .catch(error => {
+      console.error('Error calculating current Total Market Cap...');
+    });
 };
 
 // console.log(coins[0])
 // getMarketData(coins[0])
 // loopSymbols(coins.slice(0, 2))
+console.log("FUCK")
 loopSymbols(coins);
 // Runs users through surveys
