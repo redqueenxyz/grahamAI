@@ -9,8 +9,18 @@ import * as util from 'util'
 // exchange Settings
 // Kraken
 // Set an higher timeout 
-const exchange = new Kraken(process.env.KRAKEN_KEY, process.env.KRAKEN_SECRET, {
-    timeout: 60 * 60 * 48 * 1000
+const exchange = new Kraken(process.env.KRAKEN_KEY, process.env.KRAKEN_SECRET)
+
+console.log(`fuck!`)
+// console.log(await exchange.api('Balance'));
+
+exchange.api('Balance', null, function (error, data) {
+    if (error) {
+        console.log(error);
+    }
+    else {
+        console.log(data.result);
+    }
 });
 
 /**
@@ -22,9 +32,7 @@ const exchange = new Kraken(process.env.KRAKEN_KEY, process.env.KRAKEN_SECRET, {
 let makeOrder = async (volume: Number, coin: String, base: String = 'CAD') => {
     // see full list of exhange pairs here
     // https://api.kraken.com/0/public/AssetPairs
-
-
-    let tradeResponse: Function = await exchange.api('Fuck', {
+    let tradeResponse: Function = await exchange.api('AddOrder', {
         pair: 'X' + coin + 'Z' + base,
         volume: volume,
         type: 'buy',
@@ -39,7 +47,8 @@ let makeOrder = async (volume: Number, coin: String, base: String = 'CAD') => {
 }
 
 // checkOrder('XBT')
-makeOrder(0.02, 'XBT')
+// makeOrder(0.02, 'XBT')
+
 /**
  * @param {string} pairname
  * @return {object} marketData 

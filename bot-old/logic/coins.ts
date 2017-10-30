@@ -1,4 +1,6 @@
-[
+// Coins
+
+export const coins: string[] = [
     "BTC",
     "DASH",
     "ETC",

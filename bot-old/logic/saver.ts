@@ -3,10 +3,10 @@
 import * as datastore from '@google-cloud/datastore'
 
 // Local Imports
-const coins = require('../parameters/coins');
+import coins from '.g/coins'
 
 // Google Cloud Datastore
-const datastore = Datastore();
+const db = datastore();
 
 // TODO: Add these variables?
 // save price data 
@@ -19,8 +19,8 @@ const datastore = Datastore();
 export async function coinSaver(symbol: string, coinData: object) {
     console.log(`Saving ${coinData} for ${symbol}`)
 
-    datastore.upsert({
-        key: datastore.key([
+    db.upsert({
+        key: db.key([
             'Coin',
             symbol,
         ]),
@@ -44,7 +44,7 @@ export async function exchangeDataSaver(symbol: string, exchangeData: object) {
 
     const timestamp = new Date().toISOString();
     // Key
-    let key = datastore.key([
+    let key = db.key([
         'Coin',
         symbol,
         'Market',
@@ -56,7 +56,7 @@ export async function exchangeDataSaver(symbol: string, exchangeData: object) {
         data: coinData,
     };
 
-    datastore.upsert(entity) // Overwrite, not insert
+    db.upsert(entity) // Overwrite, not insert
         .then(() => {
             console.log(`Saved Market Data for ${symbol}`)
         })
@@ -75,7 +75,7 @@ export async function marketDataSaver(symbol: string, coinData: object) {
 
     const timestamp = new Date().toISOString();
     // Key
-    let key = datastore.key([
+    let key = db.key([
         'Coin',
         symbol,
         'Market',
@@ -87,7 +87,7 @@ export async function marketDataSaver(symbol: string, coinData: object) {
         data: coinData,
     };
 
-    datastore.upsert(entity) // Overwrite, not insert
+    db.upsert(entity) // Overwrite, not insert
         .then(() => {
             console.log(`Saved Market Data for ${symbol}`)
         })
