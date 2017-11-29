@@ -4,7 +4,8 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[krak "0.1.1"]
-                 [org.clojure/clojure "1.8.0"]]
+                 [org.clojure/clojure "1.8.0"]
+                 [com.knrz/dotenv "0.1.0"]]
   :main ^:skip-aot bot.buyer
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
