@@ -1,0 +1,38 @@
+{
+  "name": "grahamAI",
+  "version": "2.0.0",
+  "description": "A serverless cryptocurrency bot",
+  "main": "build/index.js",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "dependencies": {
+    "@google-cloud/datastore": "^1.1.0",
+    "@types/es6-promise": "0.0.33",
+    "cryptocompare": "^0.1.0",
+    "dotenv": "^4.0.0",
+    "kraken-api": "^1.0.0",
+    "lodash": "^4.17.4",
+    "node-fetch": "^1.7.2",
+    "winston": "^2.3.1",
+    "firebase-admin": "~5.5.0",
+    "firebase-functions": "^0.7.3"
+  },
+  "private": true,
+  "devDependencies": {},
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase experimental:functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "author": "git@github.com:redqueenxyz/grahamAI.git",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/npm/npm.git"
+  }
+}
